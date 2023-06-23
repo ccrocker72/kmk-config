@@ -16,6 +16,7 @@ from kmk.modules.tapdance import TapDance
 from kmk.utils import Debug
 import traceback
 from kmk.extensions.peg_oled_Display import Oled,OledDisplayMode,OledReactionType,OledData
+from kmk.modules.tapdance import TapDance
 from kmk.modules.mouse_keys import MouseKeys
 from kmk.modules.combos import Combos, Chord, Sequence
 from kmk.extensions.media_keys import MediaKeys
@@ -60,7 +61,7 @@ if side == SplitSide.LEFT:
         corner_one={0:OledReactionType.STATIC,1:["layer"]},
         corner_two={0:OledReactionType.LAYER,1:["0","1","2"]},
         corner_three={0:OledReactionType.LAYER,1:["base","raise","lower"]},
-        corner_four={0:OledReactionType.LAYER,1:["qwerty","nums","symbols"]}
+        corner_four={0:OledReactionType.LAYER,1:["qwerty","nums","nav"]}
         ),
         toDisplay=OledDisplayMode.TXT,flip=False)
 elif side == SplitSide.RIGHT:
@@ -70,6 +71,14 @@ elif side == SplitSide.RIGHT:
         ),
         toDisplay=OledDisplayMode.IMG,flip=False)
 keyboard.extensions.append(oled_ext)
+
+tapdance = TapDance()
+tapdance.tap_time = 750
+keyboard.modules.append(tapdance)
+ALT_TD = KC.TD(
+  KC.LSFT,
+  KC.LALT
+)
 
 keyboard.modules.append(MouseKeys())
 # auto mouse layer
@@ -120,25 +129,26 @@ keyboard.modules.append(combos)
 combos.combos = [
     Chord((KC.S, KC.D), KC.TAB),
     Chord((KC.J, KC.K), KC.ENT),
+    Chord((KC.S,KC.D,KC.F), KC.CAPS)
 ]
 
 keyboard.keymap = [[
   KC.Q, KC.W, KC.E,    KC.R, KC.T,        KC.Y,    KC.U,     KC.I,    KC.O,   KC.P,
   KC.A, KC.S, KC.D,    KC.F, KC.G,        KC.H,    KC.J,     KC.K,    KC.L,   KC.QUOT,
   KC.Z, KC.X, KC.C,    KC.V, KC.B,        KC.N,    KC.M,     KC.COMM, KC.DOT, KC.SLSH,
-              KC.LCTL, l1,   KC.SPACE,    KC.BSPC, KC.MO(2), KC.RSFT, 
+              ALT_TD,  l1,   KC.SPACE,    KC.BSPC, KC.MO(2), KC.RCTL, 
 ],
 [
-  KC.NO,   KC.NO, KC.ESC,  KC.NO,   KC.NO,      KC.N6,   KC.N7,     KC.N8,    KC.N9,     KC.N0,
-  KC.CAPS, KC.NO, KC.RPRN, KC.LPRN, KC.NO,      KC.VOLU, KC.MB_LMB, KC.MS_UP, KC.MB_RMB, KC.MINS,
-  KC.NO,   KC.NO, KC.RBRC, KC.LBRC, KC.NO,      KC.VOLD, KC.MS_LT,  KC.MS_DN, KC.MS_RT,  KC.EQL,
-                  KC.LSFT, KC.NO,   KC.NO,      KC.MUTE, KC.RSFT,   KC.RWIN, 
+  KC.NO,  KC.GRV,  KC.RPRN, KC.LPRN, KC.NO,        KC.NO,   KC.N7, KC.N8, KC.N9,  KC.MINS,
+  KC.NO,  KC.SCLN, KC.RBRC, KC.LBRC, KC.NO,        KC.NO,   KC.N4, KC.N5, KC.N6,  KC.PLUS,
+  KC.NO,  KC.NO,   KC.COLN, KC.UNDS, KC.BSLS,      KC.NO,   KC.N1, KC.N2, KC.N3,  KC.EQL,
+                   KC.LCTL, KC.NO,   KC.NO,        KC.RSFT, KC.N0, KC.DOT, 
 ],
 [
-  KC.N1, KC.N2,   KC.N3,   KC.N4, 	KC.N5,      KC.NO, KC.NO,   KC.NO,   KC.NO,   KC.NO,
-  KC.NO, KC.SCLN, KC.NO,   KC.NO,   KC.NO,      KC.NO, KC.HOME, KC.UP,   KC.END,  KC.NO,
-  KC.NO, KC.NO,   KC.COLN, KC.NO,   KC.BSLS,    KC.NO, KC.LEFT, KC.DOWN, KC.RGHT, KC.NO,
-                  KC.NO,   KC.LSFT, KC.NO,      KC.NO, KC.NO,   KC.NO, 
+  KC.NO,  KC.LGUI,   KC.NO,   KC.LALT(KC.F4), KC.NO,        KC.NO, KC.NO,   KC.MUTE, KC.VOLD, KC.VOLU,
+  KC.ESC, KC.MB_RMB, KC.DEL,  KC.MB_LMB,      KC.NO,        KC.NO, KC.HOME, KC.UP,   KC.END,  KC.PGUP,
+  KC.NO,  KC.NO,     KC.NO,   KC.NO,          KC.NO,        KC.NO, KC.LEFT, KC.DOWN, KC.RGHT, KC.PGDN,
+                    KC.LCTL, KC.LSFT,        KC.SPACE,     KC.NO, KC.NO,   KC.NO, 
 ]
 ]
 
