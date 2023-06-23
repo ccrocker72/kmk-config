@@ -1,18 +1,12 @@
 import board
+from kmk.hid import HIDModes
 
 from kmk.kmk_keyboard import KMKKeyboard
 from kmk.keys import KC
-from kmk.scanners import DiodeOrientation
 from kmk.modules.mouse_keys import MouseKeys
-from kmk.modules.pmw3360 import PMW3360
 from kmk.modules.split import Split, SplitType, SplitSide
 from kmk.modules.layers import Layers
-from kmk.modules.oneshot import OneShot
-from kmk.handlers.sequences import simple_key_sequence
-from kmk.modules.sticky_mod import StickyMod
 from storage import getmount
-from kmk.modules.holdtap import HoldTap
-from kmk.modules.tapdance import TapDance
 from kmk.utils import Debug
 import traceback
 from kmk.extensions.peg_oled_Display import Oled,OledDisplayMode,OledReactionType,OledData
@@ -20,15 +14,16 @@ from kmk.modules.tapdance import TapDance
 from kmk.modules.mouse_keys import MouseKeys
 from kmk.modules.combos import Combos, Chord, Sequence
 from kmk.extensions.media_keys import MediaKeys
+
 # identify which side the keyboard is on
 side = SplitSide.RIGHT if str(getmount('/').label)[-1] == 'R' else SplitSide.LEFT
 
 keyboard = KMKKeyboard()
 keyboard.debug_enabled = True
 
-keyboard.diode_orientation = DiodeOrientation.COL2ROW
-keyboard.col_pins = (board.GP6, board.GP5, board.GP4, board.GP3, board.GP2)
-keyboard.row_pins = (board.GP13, board.GP12, board.GP11, board.GP10, board.GP9)
+# keyboard.diode_orientation = DiodeOrientation.COL2ROW
+# \keyboard.col_pins = (board.GP6, board.GP5, board.GP4, board.GP3, board.GP2)
+# keyboard.row_pins = (board.GP13, board.GP12, board.GP11, board.GP10, board.GP9)
 
 keyboard.SCL=board.GP17
 keyboard.SDA=board.GP16
@@ -154,5 +149,5 @@ keyboard.keymap = [[
 
 if __name__ == '__main__':
   print('starting kmk...')
-  keyboard.go()
+  keyboard.go(hid_type=HIDModes.BLE)
   print('returned from kmk...')
